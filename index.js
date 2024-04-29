@@ -73,8 +73,18 @@ async function run() {
 
         // -----------delete------------------------
 
-        // app.delete("")
+        app.delete("/spots/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = {_id: new ObjectId(id)}
+            const result = await spotsCollection.deleteOne(filter);
+            res.send(result);
+        })
 
+
+
+
+
+        // -------------------------
         app.get("/spots", async(req, res) => {
             const allSpots = await spotsCollection.find({}).toArray();
             res.send(allSpots);
@@ -92,7 +102,7 @@ app.get("/spotDetails/:id" , async(req, res) => {
 // -------------------------
 
 app.get("/my-spots/:email" , async(req, res) => {
-    const mySpots = await spotsCollection.find({email : req.params.email}).toArray();
+    const mySpots = await spotsCollection.find({ email: req.params.email }).toArray();
     res.send(mySpots);
 })
 
