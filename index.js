@@ -71,12 +71,23 @@ async function run() {
             res.send(result);
         })
 
+        // -----------delete------------------------
+
+        // app.delete("")
+
         app.get("/spots", async(req, res) => {
             const allSpots = await spotsCollection.find({}).toArray();
             res.send(allSpots);
         })
 
+// ---------------------- spots details get --------------------
 
+app.get("/spotDetails/:id" , async(req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)}
+    const result = await spotsCollection.findOne(query);
+    res.send(result);
+})
 
 // -------------------------
 
