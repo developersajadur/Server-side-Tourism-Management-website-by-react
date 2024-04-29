@@ -55,7 +55,13 @@ async function run() {
 
 
 
+// -------------------------
 
+app.get("/my-spots/:email" , async(req, res) => {
+    console.log(req.params.email);
+    const mySpots = await spotsCollection.find({email : req.params.email}).toArray();
+    res.send(mySpots);
+})
 
 
     // Send a ping to confirm a successful connection
