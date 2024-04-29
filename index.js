@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 4000;
 
 
@@ -47,6 +47,29 @@ async function run() {
         const result = await spotsCollection.insertOne(newSpot);
         res.send(result);
         })
+        // -------------------------------
+        app.put("/spots/:id" , async (req, res) => {
+            const id = req.params.id;
+            const filter = {_id: new ObjectId(id)}
+            const options = { upsert: true };
+            const updateSpot = req.body;
+            const Spot = {
+                $set: {
+                    user_name: updateSpot.user_name,
+                    tourists_spot_name: updateSpot.tourists_spot_name,
+                    country_Name: updateSpot.country_Name,
+                    location: updateSpot.location,
+                    average_cost: updateSpot.average_cost,
+                    seasonality: updateSpot.seasonality,
+                    travel_time: updateSpot.travel_time,
+                    totalVisitorsPerYear: updateSpot.totalVisitorsPerYear,
+                    image: updateSpot.image,
+                    details: updateSpot.details,
+                }
+            }
+            const result = await spotsCollection.updateOne(filter, Spot, options);
+            res.send(result);
+        })
 
         app.get("/spots", async(req, res) => {
             const allSpots = await spotsCollection.find({}).toArray();
@@ -58,9 +81,18 @@ async function run() {
 // -------------------------
 
 app.get("/my-spots/:email" , async(req, res) => {
-    console.log(req.params.email);
     const mySpots = await spotsCollection.find({email : req.params.email}).toArray();
     res.send(mySpots);
+})
+
+
+// ----------------------------------
+
+app.get("/spots/:id" , async(req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)}
+    const result = await spotsCollection.findOne(query);
+    res.send(result);
 })
 
 
