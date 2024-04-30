@@ -105,6 +105,13 @@ app.get("/my-spots/:email" , async(req, res) => {
     const mySpots = await spotsCollection.find({ email: req.params.email }).toArray();
     res.send(mySpots);
 })
+// --------------------- country details find ------------------------
+app.get("/countrys/:countryName" , async (req, res) => {
+    const countryName = req.params.countryName;
+    const query = { "country_Name": countryName }
+    const result = await spotsCollection.find(query).toArray();
+    res.send(result);
+});
 // --------------------- spots find by id ------------------------
 app.get("/spots/:id" , async(req, res) => {
     const id = req.params.id;
